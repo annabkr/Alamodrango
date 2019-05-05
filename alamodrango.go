@@ -1,6 +1,4 @@
-// alamodrango.go
-
-// Add support for: https://feeds.drafthouse.com/adcService/showtimes.svc/calendar/0801/
+// alamogrango.go
 package main
 
 import (
@@ -11,25 +9,37 @@ import (
 	"os"
 	"strings"
 )
+
 func main() {
 
-	// Create and modify HTTP request
 	response, err := http.Get("https://feeds.drafthouse.com/adcService/showtimes.svc/calendar/0801/")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer response.Body.Close()
-	
-	//Get the body as a string
-	dataInBytes, err := ioutil.ReadAll(response.Body)
-	pageContent := string(dataInBytes)
 
-	sessionDateTime := strings.Index(pageContent, "SessionDateTime")
-	if sessionDateTime == -1 {
-		fmt.Println("No sessions found")
+	pageBytes, err := ioutil.ReadAll(response.Body)
+	pageContent := string(pageBytes)
+
+	startIndex := strings.Index(pageContent, "SessionDateTime")
+	if startIndex == -1 {
+		fmt.Println("No element found")
 		os.Exit(0)
 	}
 
-	fmt.Printf("Session: %s\n", sessionDateTime)
+	startIndex += 18
 
-}
+	endIndex := strings.Index(pageContent, "SessionType")
+	if endIndex == -1 {
+		fmt.Println("No closing tag for element found")
+		os.Exit(0)
+	}
+
+	endIndex -= 3
+
+
+	sessionDateTime := []byte(pageContent[startIndex:endIndex])
+
+	fmt.Printf("SessionDateTime: %s\n", sessionDateTime)
+
+	}
