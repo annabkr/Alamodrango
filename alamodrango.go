@@ -59,6 +59,7 @@ func isItFriday(mainSite drafthouse.CinemaWebsite) (bool) {
 }
 
 func setSchedule(mainSite drafthouse.CinemaWebsite, s Schedule) {
+//TODO: Implement map
 for i :=  0; i < drafthouse.DaysOfTheWeek; i++ { 
 	for j := 0; j < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films); j++{
 		s.Films = append (mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j], j)
