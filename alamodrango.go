@@ -1,64 +1,77 @@
-// alamogrango.go
+//Package main 
 package main
 
 import (
 	"encoding/json"  
-	"sort"
-	"log" 
-	"os"
-	"net/http" 
-	"github.com/annabakr/Alamodrango/drafthouse"
+	"log"
+	"fmt"
+	"io/ioutil"
+	"net/http"  
+	"drafthouse" 
 )
 
-func main() {
-	response, err := http.Get(url)
+type SimpleFilm struct {
+	FilmTitle string
+	Showtimes []Showtime
+}
+
+type Schedule struct {
+	Films []SimpleFilm 
+}
+
+type Showtime struct {  
+	Date 	string
+	Time  	string
+}
+
+
+func main() { 
+
+	response, err := http.Get(drafthouse.Url)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer response.Body.Close()
 
-	in := json.NewDecoder(response.Body)
-	out := json.NewEncoder(os.Stdout)
+	pageBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println("error")
+	} 
 
-	for {
-		var v map[string]interface{}
-		if err := in.Decode(&v); err != nil {
-			log.Println(err)
-			return
-		}
-
-		var keys []string
-		for k := range v {
-			if k != "FilmName" {
-				delete(v, k) 
-			} else {
-				keys = append(keys, k)
-			}
-
-			sort.Strings(keys)
-			for _, k := range keys {
-				log.Println("Key:", k, "Value: ", v[k])
-			}
-		}
-
-		if err := out.Encode(&v); err != nil {
-			log.Println(err)
-		}
-
-		log.Println(out)
+	var mainSite drafthouse.CinemaWebsite
+	e := json.Unmarshal(pageBytes, &mainSite)
+	if e != nil {
+		log.Println("error")
 	}
 
-	//var mainSite CinemaWebsite
-	//e := json.Unmarshal(pageBytes, &mainSite)
-	//if e != nil {
-	//	log.Println(e)
-	//}
+//	var s Schedule 
+//	setSchedule(mainSite, s)
 
-	//var numFilms := mainSite.Calendar.Cinemas[1].Films
+	friday := isItFriday(mainSite)
+
+	fmt.Println(friday)
 
 
-	//for i = 0; i < 
+}
 
-	//log.Println("Day's films: \n", mainSite.Calendar.Cinemas.size())
+func isItFriday(mainSite drafthouse.CinemaWebsite) (bool) {
+	return (mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[5].DayOfWeekNumber == "6")
+}
 
+func setSchedule(mainSite drafthouse.CinemaWebsite, s Schedule) {
+for i :=  0; i < drafthouse.DaysOfTheWeek; i++ { 
+	for j := 0; j < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films); j++{
+		s.Films = append (mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j], j)
+		fmt.Println(s.Films)
+		}
 	}
+}
+
+func setShowtimes(mainSite drafthouse.CinemaWebsite) {
+
+//	for _, num := range mainSite.
+}
+
+func setHasUpdated(mainSite drafthouse.CinemaWebsite) {
+
+}
