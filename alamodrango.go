@@ -1,31 +1,31 @@
-//Package main 
 package main
 
 import (
 	"encoding/json"  
-	"log"
+	"log" 
 	"fmt"
 	"io/ioutil"
 	"net/http"  
-	"drafthouse" 
+	"webscrape"
+	"unittest"
+	"messaging"  
 )
 
-type SimpleFilm struct {
-	FilmTitle string
-	Showtimes []Showtime
-}
-
 type Schedule struct {
-	Films []SimpleFilm 
+	Dates [7]Days
 }
 
-type Showtime struct {  
-	Date 	string
-	Time  	string
+type Days struct { 
+	Films []Showing
+}
+
+type Showing struct {
+	FilmName string
+	Showtimes []string
 }
 
 
-func main() { 
+func main() {
 
 	response, err := http.Get(drafthouse.Url)
 	if err != nil {
@@ -44,35 +44,44 @@ func main() {
 		log.Println("error")
 	}
 
-//	var s Schedule 
-//	setSchedule(mainSite, s)
+	var schedule Schedule
+	getFilmSessions(mainSite, &schedule)
 
-	friday := isItFriday(mainSite)
-
-	fmt.Println(friday)
-
-
-}
-
-func isItFriday(mainSite drafthouse.CinemaWebsite) (bool) {
-	return (mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[5].DayOfWeekNumber == "6")
-}
-
-func setSchedule(mainSite drafthouse.CinemaWebsite, s Schedule) {
-//TODO: Implement map
-for i :=  0; i < drafthouse.DaysOfTheWeek; i++ { 
-	for j := 0; j < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films); j++{
-		s.Films = append (mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j], j)
-		fmt.Println(s.Films)
+	for i := 0; i < len(schedule.Dates); i++{
+		log.Println("Day: ", i)
+		for j := 0; j < len(schedule.Dates[i].Films); j++ {
+			fmt.Printf(" Film Name:%s, Showtimes:%s \n ", schedule.Dates[i].Films[j].FilmName, schedule.Dates[i].Films[j].Showtimes)
 		}
 	}
+	 
 }
 
-func setShowtimes(mainSite drafthouse.CinemaWebsite) {
 
-//	for _, num := range mainSite.
+
+func getFilmSessions(mainSite drafthouse.CinemaWebsite, schedule *Schedule){
+	for i := 0; i < len(schedule.Dates); i++ {
+	
+		var dailyFilms []Showing
+
+		for j := 0; j < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films); j++ {
+
+			var filmName string = mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j].FilmName
+			var showtimes []string
+
+			for k := 0; k < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j].Series); k++ {
+				for l := 0; l < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j].Series[k].Formats); l++ {
+					for m := 0; m < len(mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j].Series[k].Formats[l].Sessions); m++ {
+						showtimes = append(showtimes, mainSite.Calendar.Cinemas[0].Months[0].Weeks[0].Days[i].Films[j].Series[k].Formats[l].Sessions[m].SessionTime)
+					}
+				}
+			}
+			
+			var film = Showing {filmName, showtimes} 
+			dailyFilms = append(dailyFilms, film)
+		}
+
+		schedule.Dates[i].Films = append(dailyFilms)
+	} 
+
 }
 
-func setHasUpdated(mainSite drafthouse.CinemaWebsite) {
-
-}
