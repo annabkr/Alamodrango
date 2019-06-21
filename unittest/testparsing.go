@@ -1,10 +1,14 @@
-//TODO: Implement unit tests once interface complete
-package drafthouse
+package unittest
+//
+//import "testing"
 
-import "testing"
-
-func TestParsing(){
-	
-}
-
-f
+//func TestParsing(){
+//}
+//
+//
+//func TestSum(t *testing.T) {
+//    total := Sum(5, 5)
+//    if total != 10 {
+//       t.Errorf("Sum was incorrect, got: %d, want: %d.", total, 10)
+//    }
+//}
