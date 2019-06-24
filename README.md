@@ -11,11 +11,11 @@ Gotta get those good seats! Continuing to expand functionality and support.
 ## Getting Started
 These instructions will get a copy of the project up and running on your local machine.
 
+Note that some features, including Twilio functionality, are disabled for the demo of this project for security purposes.
+
 ## Installing
 
 Download or clone the repository. Ensure that you have Golang installed. In the console, navigate to the project directory. 
-
-Note that Twilio functionality is disabled for this copy of the project due to security concerns.
 
 Build using the following command:
 ```
