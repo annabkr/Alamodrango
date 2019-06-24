@@ -15,6 +15,8 @@ These instructions will get a copy of the project up and running on your local m
 
 Download or clone the repository. Ensure that you have Golang installed. In the console, navigate to the project directory. 
 
+Note that Twilio functionality is disabled for this copy of the project due to security concerns.
+
 Build using the following command:
 ```
 go build alamodrango.go
