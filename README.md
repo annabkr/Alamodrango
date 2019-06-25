@@ -2,7 +2,7 @@
 
 Web scraper bot that sends text messages when Alamo Drafthouse posts new movie showtimes.
 
-I'm an Alamo Drafthouse regular. They update the showtimes manually, sometime between Monday-Wednesdya. I got tired of refreshing the page every hour, so I decided to make a bot to do it for me. 
+I'm an Alamo Drafthouse regular. They update the showtimes manually, sometime between Monday-Wednesday. I got tired of refreshing the page every hour, so I decided to make a bot to do it for me. 
 
 Gotta get those good seats! Continuing to expand functionality and support.
 
