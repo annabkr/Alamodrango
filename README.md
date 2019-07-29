@@ -1,4 +1,4 @@
-# Alamodrango
+# go-alamodrango
 
 Web scraper bot that sends text messages when Alamo Drafthouse posts new movie showtimes.
 
